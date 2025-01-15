@@ -8,10 +8,6 @@ const routes: RouteRecordRaw[] = [
       {
         path: '',
         component: () => import('pages/LoginPage.vue')
-      },
-      {
-        path: 'finances',
-        component: () => import('pages/FinancesPage.vue')
       }
     ]
   },
@@ -23,6 +19,10 @@ const routes: RouteRecordRaw[] = [
         path: 'dashboard',
         component: () => import('pages/DashboardPage.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'finances',
+        component: () => import('pages/FinancesPage.vue')
       }
     ]
   },
