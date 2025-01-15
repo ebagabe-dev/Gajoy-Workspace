@@ -14,6 +14,11 @@
           >
             {{ finance.categories.name }}
           </q-chip>
+
+          <div class="finance-card__info">
+            <q-icon :name="finance.type === 'Receita' ? 'arrow_upward' : 'arrow_downward'" />
+            {{ finance.type }}
+          </div>
         </q-card-section>
 
         <q-card-section>

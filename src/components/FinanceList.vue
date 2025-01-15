@@ -25,6 +25,15 @@
               {{ props.row.categories.name }}
             </q-chip>
           </q-td>
+          <q-td key="type" :props="props">
+            <q-chip
+              :color="props.row.type === 'Receita' ? 'positive' : 'negative'"
+              text-color="white"
+              dense
+            >
+              {{ props.row.type }}
+            </q-chip>
+          </q-td>
           <q-td key="status" :props="props">
             <q-badge :color="props.row.status === 'Concluído' ? 'positive' : 'warning'">
               {{ props.row.status }}

@@ -31,6 +31,14 @@ export const financeService = {
     return data as Finance
   },
 
+  async updateFinance(financeId: number, finance: NewFinance) {
+    console.log('TODO: adicionar logica para deletar', financeId, finance)
+  },
+
+  async deleteFinance(financeId: number) {
+    console.log('TODO: adicionar logica para deletar', financeId)
+  },
+
   async getCategories(): Promise<Category[]> {
     const { data, error } = await supabase
       .from('categories')
