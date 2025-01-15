@@ -1,29 +1,33 @@
-import { supabase } from "src/boot/supabase";
-import type { Finance } from "src/types/finances";
+import { supabase } from 'src/boot/supabase'
+import type { Finance, NewFinance } from 'src/types/finances'
 
 export const financeService = {
-    async getFinances() {
-        const { data, error } = await supabase
-            .from('finances')
-            .select(`
-                 *,
-                 categories(name),
-                 clients(name)   
-            `)
-            .order('created_at', { ascending: false })
+  async getFinances(): Promise<Finance[]> {
+    const { data, error } = await supabase
+      .from('finances')
+      .select(`
+        *,
+        categories(name),
+        clients(name)
+      `)
+      .order('created_at', { ascending: false })
 
-        if (error) throw error
-        return data
-    },
+    if (error) throw error
+    return data as Finance[]
+  },
 
-    async addFinance(finance: Omit<Finance, 'id' | 'created_at'>) {
-        const { data, error } = await supabase
-            .from('finances')
-            .insert(finance)
-            .select()
+  async addFinance(newFinance: NewFinance): Promise<Finance> {
+    const { data, error } = await supabase
+      .from('finances')
+      .insert(newFinance)
+      .select(`
+        *,
+        categories(name),
+        clients(name)
+      `)
+      .single()
 
-        if (error) throw error
-
-        return data[0]
-    }
+    if (error) throw error
+    return data as Finance
+  }
 }
