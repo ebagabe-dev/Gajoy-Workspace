@@ -1,5 +1,5 @@
 import { supabase } from 'src/boot/supabase'
-import type { Finance, NewFinance } from 'src/types/finances'
+import type { Category, Client, Finance, NewFinance } from 'src/types/finances'
 
 export const financeService = {
   async getFinances(): Promise<Finance[]> {
@@ -29,5 +29,25 @@ export const financeService = {
 
     if (error) throw error
     return data as Finance
+  },
+
+  async getCategories(): Promise<Category[]> {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('*')
+      .order('name')
+
+    if (error) throw error
+    return data as Category[]
+  },
+
+  async getClients(): Promise<Client[]> {
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .order('name')
+
+    if (error) throw error
+    return data as Client[]
   }
 }

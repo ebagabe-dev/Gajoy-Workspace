@@ -7,10 +7,8 @@ export interface Client {
   id: number;
   name: string;
   email?: string;
-  created_at: string;
 }
 
-// src/types/finance.ts
 export interface Finance {
   id: number;
   title: string;
@@ -21,8 +19,8 @@ export interface Finance {
   value: number;
   client_id: number;
   created_at: string;
-  categories: { name: string };
-  clients: { name: string };
+  categories: Category;
+  clients: Client;
 }
 
 export interface NewFinance {
@@ -34,3 +32,4 @@ export interface NewFinance {
   value: number;
   client_id: number | null;
 }
+

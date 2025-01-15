@@ -41,13 +41,21 @@
             <q-select
               v-model="newFinance.category_id"
               :options="categoryOptions"
+              option-value="value"
+              option-label="label"
+              emit-value
+              map-options
               label="Categoria"
               :rules="[(val) => !!val || 'Campo obrigatório']"
             />
             <q-select
-              v-model="newFinance.status"
-              :options="['Em andamento', 'Concluído']"
-              label="Status"
+              v-model="newFinance.client_id"
+              :options="clientOptions"
+              option-value="value"
+              option-label="label"
+              emit-value
+              map-options
+              label="Cliente"
               :rules="[(val) => !!val || 'Campo obrigatório']"
             />
             <q-input
@@ -84,16 +92,18 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { financeService } from 'src/services/finances'
-import type { NewFinance } from 'src/types/finances'
+import { type NewFinance } from 'src/types/finances'
 import FinanceCards from 'src/components/FinanceCards.vue'
 import FinanceList from 'src/components/FinanceList.vue'
-import type { Finance } from 'src/types/finances'
+import type { Finance, Category, Client } from 'src/types/finances'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
 
 const viewMode = ref('cards')
 const finances = ref<Finance[]>([])
+const categories = ref<Category[]>([])
+const clients = ref<Client[]>([])
 const addDialog = ref(false)
 
 const newFinance = ref<NewFinance>({
@@ -106,26 +116,32 @@ const newFinance = ref<NewFinance>({
   client_id: null,
 })
 
-const categoryOptions = ref([
-  { label: 'Categoria 1', value: 1 },
-  { label: 'Categoria 2', value: 2 },
-])
+const categoryOptions = computed(() =>
+  categories.value.map((cat) => ({ label: cat.name, value: cat.id })),
+)
 
-const clientOptions = ref([
-  { label: 'Cliente 1', value: 1 },
-  { label: 'Cliente 2', value: 2 },
-])
+const clientOptions = computed(() =>
+  clients.value.map((client) => ({ label: client.name, value: client.id })),
+)
 
 const currentView = computed(() => (viewMode.value === 'cards' ? FinanceCards : FinanceList))
 
 onMounted(async () => {
   try {
-    finances.value = await financeService.getFinances()
+    const [financeData, categoryData, clientData] = await Promise.all([
+      financeService.getFinances(),
+      financeService.getCategories(),
+      financeService.getClients(),
+    ])
+
+    finances.value = financeData
+    categories.value = categoryData
+    clients.value = clientData
   } catch (error) {
     console.error('Error fetching finances:', error)
     $q.notify({
       color: 'negative',
-      message: 'Erro ao carregar finanças',
+      message: 'Erro ao carregar dados',
     })
   }
 })
