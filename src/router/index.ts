@@ -6,6 +6,7 @@ import {
   createWebHistory,
 } from 'vue-router';
 import routes from './routes';
+import { useAdminStore } from 'src/stores/admin';
 
 /*
  * If not building with SSR mode, you can
@@ -30,6 +31,20 @@ export default defineRouter(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
+
+  Router.beforeEach((to, from, next) => {
+    const adminStore = useAdminStore()
+
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (!adminStore.isAuthenticated) {
+        next('/')
+      } else {
+        next()
+      }
+    } else {
+      next()
+    }
+  })
 
   return Router;
 });
