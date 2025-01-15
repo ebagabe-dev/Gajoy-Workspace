@@ -10,9 +10,23 @@
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header> Menu </q-item-label>
-
-        <EssentialLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
+        <q-item-label header>Menu</q-item-label>
+        <q-item
+          v-for="link in essentialLinks"
+          :key="link.title"
+          v-ripple
+          clickable
+          tag="a"
+          :to="link.link"
+        >
+          <q-item-section avatar>
+            <q-icon :name="link.icon" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ link.title }}</q-item-label>
+            <q-item-label caption>{{ link.caption }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
@@ -24,14 +38,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import EssentialLink from 'components/EssentialLink.vue'
 
 const essentialLinks = [
   {
     title: 'Finanças',
     caption: 'Gerenciar finanças',
     icon: 'attach_money',
-    link: '/finances',
+    link: { name: 'finances' },
   },
 ]
 
