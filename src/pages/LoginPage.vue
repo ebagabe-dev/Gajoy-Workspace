@@ -77,11 +77,13 @@ const onSubmit = async () => {
   try {
     const isValid = await adminStore.validateAccess(accessCode.value)
     if (isValid) {
+      localStorage.setItem('isAuthenticated', 'true')
       $q.notify({
         type: 'positive',
-        message: 'Login successful!',
+        message: 'Bem vindo Gajoy!',
       })
-      router.push('/dashboard')
+
+      router.push({ name: 'dashboard' })
     } else {
       showError.value = true
     }
@@ -89,7 +91,7 @@ const onSubmit = async () => {
     console.error(error)
     $q.notify({
       type: 'negative',
-      message: 'An error occurred. Please try again.',
+      message: 'Um erro aconteceu. Por favor, tente novamente.',
     })
   } finally {
     loading.value = false
